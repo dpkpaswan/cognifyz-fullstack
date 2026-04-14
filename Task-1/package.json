@@ -1,0 +1,22 @@
+{
+  "name": "task-1-form-handling",
+  "version": "1.0.0",
+  "description": "Full Stack Development Internship - Task 1: Server-side form handling with Express and EJS templating",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "express",
+    "ejs",
+    "form-handling",
+    "server-side-rendering"
+  ],
+  "author": "Deepak Paswan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "ejs": "^3.1.10"
+  }
+}

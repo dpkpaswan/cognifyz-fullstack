@@ -1,0 +1,101 @@
+<!--
+  form.ejs - Contact Form Template
+  
+  This EJS template renders an HTML form that collects user data (name,
+  email, message). The template receives variables from the server
+  via res.render():
+    - pageTitle:     string used in the title tag
+    - errors:        (optional) array of validation error messages
+    - previousInput: (optional) object with previously submitted values
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact form built with Express.js and EJS server-side rendering" />
+
+  <!-- Page title is set dynamically from the server -->
+  <title><%= pageTitle %> - Task 1</title>
+
+  <!-- Google Fonts - Inter for modern, clean typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Application stylesheet served from the public directory -->
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="card" role="main">
+    <!-- Page heading -->
+    <h1 class="card__title"><%= pageTitle %></h1>
+    <p class="card__subtitle">Fill in the details below and hit submit.</p>
+
+    <!--
+      Validation Error Display
+      If the server sends back an "errors" array (when validation fails),
+      we iterate over it and display each error message. The 'typeof'
+      check prevents a ReferenceError when the variable is not passed.
+    -->
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <ul class="error-list" role="alert" aria-label="Form validation errors">
+        <% errors.forEach(function(errorMsg) { %>
+          <li><%= errorMsg %></li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <!--
+      HTML Form
+      - action="/submit" tells the browser to send the data to the /submit endpoint
+      - method="POST" ensures data is sent in the request body, not the URL
+      - Each input's "name" attribute matches the key we read in req.body on the server
+    -->
+    <form action="/submit" method="POST" id="contactForm" novalidate>
+      
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="userName">Full Name</label>
+        <input
+          type="text"
+          id="userName"
+          name="userName"
+          placeholder="e.g. Deepak Paswan"
+          required
+          value="<%= (typeof previousInput !== 'undefined' && previousInput.userName) ? previousInput.userName : '' %>"
+        />
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="userEmail">Email Address</label>
+        <input
+          type="email"
+          id="userEmail"
+          name="userEmail"
+          placeholder="e.g. deepak@example.com"
+          required
+          value="<%= (typeof previousInput !== 'undefined' && previousInput.userEmail) ? previousInput.userEmail : '' %>"
+        />
+      </div>
+
+      <!-- Message Field -->
+      <div class="form-group">
+        <label for="userMessage">Your Message</label>
+        <textarea
+          id="userMessage"
+          name="userMessage"
+          placeholder="Write your message here..."
+          required
+        ><%= (typeof previousInput !== 'undefined' && previousInput.userMessage) ? previousInput.userMessage : '' %></textarea>
+      </div>
+
+      <!-- Submit button -->
+      <button type="submit" class="btn-submit" id="submitBtn">
+        Send Message
+      </button>
+    </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!--
+  result.ejs - Submission Result Template
+  
+  This template displays the data that the user submitted through the
+  contact form. It receives a "submission" object from the server
+  containing: name, email, message, and submittedAt.
+  
+  This page demonstrates a core server-side rendering concept:
+  the server processes form data, enriches it (e.g. adds a timestamp),
+  and then constructs the final HTML before sending it to the browser.
+  The client never sees the raw data or the template - only the
+  fully rendered page.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Form submission confirmed - data rendered using EJS server-side templating" />
+
+  <title><%= pageTitle %> - Task 1</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="card" role="main">
+    <h1 class="card__title"><%= pageTitle %></h1>
+    <p class="card__subtitle">Here is the information you submitted.</p>
+
+    <!-- Success indicator -->
+    <span class="badge-success">Submitted Successfully</span>
+
+    <!--
+      Result Grid
+      Each result-item shows a label and its corresponding value.
+      EJS output tags automatically escape HTML entities, which
+      prevents Cross-Site Scripting (XSS) attacks. If a user typed
+      malicious script tags in the name field, they would be
+      displayed as plain text, not executed.
+    -->
+    <div class="result-grid">
+      <!-- Display the submitted name -->
+      <div class="result-item">
+        <div class="result-item__label">Name</div>
+        <div class="result-item__value"><%= submission.name %></div>
+      </div>
+
+      <!-- Display the submitted email -->
+      <div class="result-item">
+        <div class="result-item__label">Email</div>
+        <div class="result-item__value"><%= submission.email %></div>
+      </div>
+
+      <!-- Display the submitted message -->
+      <div class="result-item">
+        <div class="result-item__label">Message</div>
+        <div class="result-item__value"><%= submission.message %></div>
+      </div>
+
+      <!--
+        Display the server-generated timestamp.
+        This value was created on the server, not sent by the user,
+        illustrating how SSR can enrich data before rendering.
+      -->
+      <div class="result-item">
+        <div class="result-item__label">Submitted At</div>
+        <div class="result-item__value"><%= submission.submittedAt %></div>
+      </div>
+    </div>
+
+    <!-- Navigation link to return to the form -->
+    <a href="/" class="back-link">Submit another response</a>
+  </main>
+</body>
+</html>
