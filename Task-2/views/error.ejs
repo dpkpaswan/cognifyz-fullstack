@@ -1,0 +1,26 @@
+<!--
+  error.ejs - Generic Error Page
+
+  Displayed when a requested resource is not found (e.g. invalid
+  submission ID).
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= pageTitle %> - Task 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="card">
+    <div class="error-code">404</div>
+    <h1 class="card__title"><%= pageTitle %></h1>
+    <p class="card__subtitle"><%= errorMessage %></p>
+    <a href="/" class="back-link">Back to Registration</a>
+  </main>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!--
+  register.ejs - Registration Form Template
+
+  A complex form with multiple field types (text, email, tel, number,
+  select, checkboxes, textarea). Includes inline JavaScript for
+  real-time client-side validation before submission.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Registration form with client-side and server-side validation" />
+  <title><%= pageTitle %> - Task 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="card">
+    <h1 class="card__title"><%= pageTitle %></h1>
+    <p class="card__subtitle">Complete all fields to register your profile.</p>
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+      <a href="/" class="nav-link nav-link--active">Register</a>
+      <a href="/dashboard" class="nav-link">
+        Dashboard<% if (submissionCount > 0) { %><span class="counter-badge"><%= submissionCount %></span><% } %>
+      </a>
+    </nav>
+
+    <!-- Server-side error banner (shown when validation fails on the server) -->
+    <% if (errors.length > 0) { %>
+      <div class="error-banner" role="alert">
+        <div class="error-banner__title">Please fix the following errors:</div>
+        <ul class="error-banner__list">
+          <% errors.forEach(function(err) { %>
+            <li><%= err.message %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form action="/register" method="POST" id="regForm" novalidate>
+
+      <!-- Row 1: Name and Email side by side -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="e.g. Deepak Paswan"
+            required
+            minlength="2"
+            value="<%= previousInput.fullName || '' %>"
+          />
+          <span class="field-error" id="fullNameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="e.g. deepak@example.com"
+            required
+            value="<%= previousInput.email || '' %>"
+          />
+          <span class="field-error" id="emailError"></span>
+        </div>
+      </div>
+
+      <!-- Row 2: Phone and Age side by side -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="e.g. 9876543210"
+            required
+            value="<%= previousInput.phone || '' %>"
+          />
+          <span class="field-error" id="phoneError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            placeholder="e.g. 22"
+            required
+            min="16"
+            max="120"
+            value="<%= previousInput.age || '' %>"
+          />
+          <span class="field-error" id="ageError"></span>
+        </div>
+      </div>
+
+      <!-- Gender dropdown -->
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" required>
+          <option value="" disabled <%= (!previousInput.gender) ? 'selected' : '' %>>Select your gender</option>
+          <option value="male" <%= (previousInput.gender === 'male') ? 'selected' : '' %>>Male</option>
+          <option value="female" <%= (previousInput.gender === 'female') ? 'selected' : '' %>>Female</option>
+          <option value="other" <%= (previousInput.gender === 'other') ? 'selected' : '' %>>Other</option>
+          <option value="prefer-not-to-say" <%= (previousInput.gender === 'prefer-not-to-say') ? 'selected' : '' %>>Prefer not to say</option>
+        </select>
+        <span class="field-error" id="genderError"></span>
+      </div>
+
+      <!-- Skills checkboxes -->
+      <div class="form-group">
+        <label>Skills (select at least one)</label>
+        <div class="checkbox-grid">
+          <% 
+            var skillOptions = ['HTML/CSS', 'JavaScript', 'Node.js', 'React', 'Python', 'SQL'];
+            var selectedSkills = previousInput.skills || [];
+            if (typeof selectedSkills === 'string') selectedSkills = [selectedSkills];
+          %>
+          <% skillOptions.forEach(function(skill) { %>
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                name="skills"
+                value="<%= skill %>"
+                <%= selectedSkills.includes(skill) ? 'checked' : '' %>
+              />
+              <%= skill %>
+            </label>
+          <% }); %>
+        </div>
+        <span class="field-error" id="skillsError"></span>
+      </div>
+
+      <!-- Bio textarea with character counter -->
+      <div class="form-group">
+        <label for="bio">Short Bio</label>
+        <textarea
+          id="bio"
+          name="bio"
+          placeholder="Tell us about yourself (10-500 characters)..."
+          required
+          maxlength="500"
+        ><%= previousInput.bio || '' %></textarea>
+        <span class="char-counter" id="charCounter">0 / 500</span>
+        <span class="field-error" id="bioError"></span>
+      </div>
+
+      <button type="submit" class="btn btn--primary" id="submitBtn">
+        Register Now
+      </button>
+    </form>
+  </main>
+
+  <!--
+    Inline JavaScript for Client-Side Validation
+    
+    This script runs in the browser and provides instant feedback
+    as the user fills out the form. It does NOT replace server-side
+    validation - it simply improves the user experience by catching
+    errors before the form is submitted to the server.
+  -->
+  <script>
+    (function() {
+      // Grab references to all form elements
+      var form = document.getElementById('regForm');
+      var fullName = document.getElementById('fullName');
+      var email = document.getElementById('email');
+      var phone = document.getElementById('phone');
+      var age = document.getElementById('age');
+      var gender = document.getElementById('gender');
+      var bio = document.getElementById('bio');
+      var charCounter = document.getElementById('charCounter');
+
+      // ---- Helper: show / clear inline error ----
+
+      function showError(inputEl, errorId, message) {
+        var errSpan = document.getElementById(errorId);
+        errSpan.textContent = message;
+        errSpan.classList.add('visible');
+        inputEl.classList.add('input-error');
+      }
+
+      function clearError(inputEl, errorId) {
+        var errSpan = document.getElementById(errorId);
+        errSpan.textContent = '';
+        errSpan.classList.remove('visible');
+        inputEl.classList.remove('input-error');
+      }
+
+      // ---- Individual field validators ----
+
+      function validateFullName() {
+        if (fullName.value.trim().length < 2) {
+          showError(fullName, 'fullNameError', 'Name must be at least 2 characters.');
+          return false;
+        }
+        clearError(fullName, 'fullNameError');
+        return true;
+      }
+
+      function validateEmail() {
+        var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!pattern.test(email.value.trim())) {
+          showError(email, 'emailError', 'Enter a valid email address.');
+          return false;
+        }
+        clearError(email, 'emailError');
+        return true;
+      }
+
+      function validatePhone() {
+        var digits = phone.value.replace(/[\s\-()]/g, '');
+        if (digits.length < 10) {
+          showError(phone, 'phoneError', 'Phone must have at least 10 digits.');
+          return false;
+        }
+        clearError(phone, 'phoneError');
+        return true;
+      }
+
+      function validateAge() {
+        var val = parseInt(age.value, 10);
+        if (isNaN(val) || val < 16 || val > 120) {
+          showError(age, 'ageError', 'Age must be between 16 and 120.');
+          return false;
+        }
+        clearError(age, 'ageError');
+        return true;
+      }
+
+      function validateGender() {
+        if (!gender.value) {
+          showError(gender, 'genderError', 'Please select a gender.');
+          return false;
+        }
+        clearError(gender, 'genderError');
+        return true;
+      }
+
+      function validateSkills() {
+        var checked = document.querySelectorAll('input[name="skills"]:checked');
+        var container = document.querySelector('.checkbox-grid');
+        if (checked.length === 0) {
+          showError(container, 'skillsError', 'Select at least one skill.');
+          return false;
+        }
+        clearError(container, 'skillsError');
+        return true;
+      }
+
+      function validateBio() {
+        var length = bio.value.trim().length;
+        if (length < 10) {
+          showError(bio, 'bioError', 'Bio must be at least 10 characters.');
+          return false;
+        }
+        if (length > 500) {
+          showError(bio, 'bioError', 'Bio must not exceed 500 characters.');
+          return false;
+        }
+        clearError(bio, 'bioError');
+        return true;
+      }
+
+      // ---- Real-time validation on blur (when user leaves a field) ----
+
+      fullName.addEventListener('blur', validateFullName);
+      email.addEventListener('blur', validateEmail);
+      phone.addEventListener('blur', validatePhone);
+      age.addEventListener('blur', validateAge);
+      gender.addEventListener('change', validateGender);
+      bio.addEventListener('blur', validateBio);
+
+      // ---- Character counter for bio textarea ----
+
+      function updateCharCounter() {
+        var length = bio.value.length;
+        charCounter.textContent = length + ' / 500';
+        if (length > 500) {
+          charCounter.classList.add('over-limit');
+        } else {
+          charCounter.classList.remove('over-limit');
+        }
+      }
+
+      bio.addEventListener('input', updateCharCounter);
+      // Initialize counter on page load (for preserved input)
+      updateCharCounter();
+
+      // ---- Full form validation on submit ----
+
+      form.addEventListener('submit', function(event) {
+        // Run all validators and collect results
+        var isValid = true;
+
+        if (!validateFullName()) isValid = false;
+        if (!validateEmail()) isValid = false;
+        if (!validatePhone()) isValid = false;
+        if (!validateAge()) isValid = false;
+        if (!validateGender()) isValid = false;
+        if (!validateSkills()) isValid = false;
+        if (!validateBio()) isValid = false;
+
+        // If any field is invalid, prevent form submission
+        if (!isValid) {
+          event.preventDefault();
+
+          // Scroll to the first error so the user can see it
+          var firstError = document.querySelector('.field-error.visible');
+          if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

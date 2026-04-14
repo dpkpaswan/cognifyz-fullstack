@@ -1,0 +1,87 @@
+<!--
+  success.ejs - Registration Success Page
+
+  Displays the validated and stored submission data after a
+  successful registration. The user is redirected here via the
+  POST-Redirect-GET pattern to prevent duplicate submissions.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Registration successful - submission stored on the server" />
+  <title><%= pageTitle %> - Task 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="card">
+    <!-- Success icon -->
+    <div class="success-icon">&#10003;</div>
+
+    <h1 class="card__title"><%= pageTitle %></h1>
+    <p class="card__subtitle">Your data has been validated and stored on the server.</p>
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+      <a href="/" class="nav-link">Register Another</a>
+      <a href="/dashboard" class="nav-link">
+        Dashboard<% if (submissionCount > 0) { %><span class="counter-badge"><%= submissionCount %></span><% } %>
+      </a>
+    </nav>
+
+    <!-- Display all submitted data -->
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="result-item__label">Full Name</div>
+        <div class="result-item__value"><%= submission.fullName %></div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-item__label">Email</div>
+        <div class="result-item__value"><%= submission.email %></div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-item__label">Phone</div>
+        <div class="result-item__value"><%= submission.phone %></div>
+      </div>
+
+      <div class="form-row">
+        <div class="result-item" style="flex: 1;">
+          <div class="result-item__label">Age</div>
+          <div class="result-item__value"><%= submission.age %></div>
+        </div>
+        <div class="result-item" style="flex: 1;">
+          <div class="result-item__label">Gender</div>
+          <div class="result-item__value" style="text-transform: capitalize;"><%= submission.gender.replace('-', ' ') %></div>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-item__label">Skills</div>
+        <div class="result-item__value">
+          <div class="skill-badges">
+            <% submission.skills.forEach(function(skill) { %>
+              <span class="badge"><%= skill %></span>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-item__label">Bio</div>
+        <div class="result-item__value"><%= submission.bio %></div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-item__label">Stored At</div>
+        <div class="result-item__value"><%= submission.submittedAt %></div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

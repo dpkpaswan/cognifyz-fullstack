@@ -1,0 +1,22 @@
+{
+  "name": "task-2-validation-and-storage",
+  "version": "1.0.0",
+  "description": "Full Stack Development Internship - Task 2: Inline styles, client/server validation, and temporary server-side storage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "express",
+    "ejs",
+    "validation",
+    "server-side-storage"
+  ],
+  "author": "Deepak Paswan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "ejs": "^3.1.10"
+  }
+}

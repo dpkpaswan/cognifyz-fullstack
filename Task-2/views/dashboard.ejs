@@ -1,0 +1,91 @@
+<!--
+  dashboard.ejs - Submissions Dashboard
+
+  Displays all stored submissions in a table. Each row has a
+  delete button that sends a POST request to remove the entry
+  from server-side storage.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dashboard showing all stored form submissions" />
+  <title><%= pageTitle %> - Task 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main class="card card--wide">
+    <h1 class="card__title"><%= pageTitle %></h1>
+    <p class="card__subtitle">
+      <% if (submissionCount > 0) { %>
+        <%= submissionCount %> registration<%= submissionCount !== 1 ? 's' : '' %> stored in server memory.
+      <% } else { %>
+        No registrations yet. Data is stored temporarily in server memory.
+      <% } %>
+    </p>
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+      <a href="/" class="nav-link">Register</a>
+      <a href="/dashboard" class="nav-link nav-link--active">
+        Dashboard<% if (submissionCount > 0) { %><span class="counter-badge"><%= submissionCount %></span><% } %>
+      </a>
+    </nav>
+
+    <% if (submissions.length === 0) { %>
+      <!-- Empty state -->
+      <div class="empty-state">
+        <div class="empty-state__icon">&#128203;</div>
+        <p class="empty-state__text">No submissions yet. Register someone to see data here.</p>
+        <a href="/" class="btn btn--primary" style="display: inline-flex; width: auto;">Go to Form</a>
+      </div>
+    <% } else { %>
+      <!-- Data table -->
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Age</th>
+              <th>Skills</th>
+              <th>Submitted</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% submissions.forEach(function(entry, index) { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= entry.fullName %></td>
+                <td class="cell-email"><%= entry.email %></td>
+                <td><%= entry.phone %></td>
+                <td><%= entry.age %></td>
+                <td>
+                  <div class="skill-badges">
+                    <% entry.skills.forEach(function(skill) { %>
+                      <span class="badge"><%= skill %></span>
+                    <% }); %>
+                  </div>
+                </td>
+                <td class="cell-date"><%= entry.submittedAt %></td>
+                <td>
+                  <form action="/delete/<%= entry.id %>" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn--danger" title="Delete this entry">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </main>
+</body>
+</html>
