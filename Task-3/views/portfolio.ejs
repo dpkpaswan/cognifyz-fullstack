@@ -1,0 +1,337 @@
+<!--
+  portfolio.ejs - Multi-Section Responsive Portfolio Page
+
+  Demonstrates:
+  - Bootstrap 5 grid system for responsive layouts
+  - Multiple page sections (navbar, hero, about, skills, projects, contact, footer)
+  - Custom CSS animations and transitions
+  - Server-side data rendering via EJS
+  - Responsive design that adapts to mobile, tablet, and desktop
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portfolio of Deepak Paswan - Full Stack Developer" />
+  <title><%= pageTitle %></title>
+
+  <!-- Bootstrap 5 CSS (CDN) - CSS Framework for responsive grid and components -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Custom stylesheet (loaded AFTER Bootstrap to override where needed) -->
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="80">
+
+  <!-- ===== NAVBAR ===== -->
+  <!-- Bootstrap navbar with responsive collapse (hamburger on mobile) -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="#hero">
+        <span class="brand-dot"></span>DP
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"
+        aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <!-- Full-viewport landing area with animated gradient background -->
+  <section id="hero" class="hero-section d-flex align-items-center">
+    <div class="hero-bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="container position-relative">
+      <div class="row align-items-center">
+        <div class="col-lg-7 hero-content">
+          <p class="hero-greeting animate-on-scroll"><%= data.hero.greeting %></p>
+          <h1 class="hero-name animate-on-scroll"><%= data.hero.name %></h1>
+          <h2 class="hero-title animate-on-scroll"><%= data.hero.title %></h2>
+          <p class="hero-tagline animate-on-scroll"><%= data.hero.tagline %></p>
+          <div class="hero-buttons animate-on-scroll">
+            <a href="#projects" class="btn btn-primary btn-lg me-3">View Projects</a>
+            <a href="#contact" class="btn btn-outline-light btn-lg">Contact Me</a>
+          </div>
+        </div>
+        <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+          <!-- Animated code block decoration -->
+          <div class="code-block animate-on-scroll">
+            <div class="code-header">
+              <span class="code-dot" style="background:#ff5f57"></span>
+              <span class="code-dot" style="background:#ffbd2e"></span>
+              <span class="code-dot" style="background:#28c840"></span>
+            </div>
+            <pre class="code-body"><span class="code-keyword">const</span> <span class="code-var">developer</span> = {
+  <span class="code-key">name</span>: <span class="code-string">'<%= data.hero.name %>'</span>,
+  <span class="code-key">role</span>: <span class="code-string">'<%= data.hero.title %>'</span>,
+  <span class="code-key">skills</span>: [<span class="code-string">'JS'</span>, <span class="code-string">'Node'</span>, <span class="code-string">'CSS'</span>],
+  <span class="code-key">passionate</span>: <span class="code-bool">true</span>
+};</pre>
+          </div>
+        </div>
+      </div>
+      <!-- Stats row -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <div class="stats-row animate-on-scroll">
+            <% data.stats.forEach(function(stat) { %>
+              <div class="stat-item">
+                <span class="stat-value"><%= stat.value %></span>
+                <span class="stat-label"><%= stat.label %></span>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT SECTION ===== -->
+  <section id="about" class="section about-section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll"><%= data.about.heading %></h2>
+      <div class="section-divider animate-on-scroll"></div>
+      <div class="row align-items-center mt-5">
+        <div class="col-lg-6 mb-4 mb-lg-0 animate-on-scroll">
+          <p class="about-text"><%= data.about.description %></p>
+        </div>
+        <div class="col-lg-6 animate-on-scroll">
+          <div class="highlights-card">
+            <h5 class="highlights-title"><i class="bi bi-lightning-charge-fill"></i> Key Highlights</h5>
+            <ul class="highlights-list">
+              <% data.about.highlights.forEach(function(item) { %>
+                <li><i class="bi bi-check-circle-fill"></i> <%= item %></li>
+              <% }); %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS SECTION ===== -->
+  <!-- Animated progress bars rendered from server-side skill data -->
+  <section id="skills" class="section skills-section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">My Skills</h2>
+      <div class="section-divider animate-on-scroll"></div>
+
+      <!-- Bootstrap grid: 2 columns on medium+, 1 on mobile -->
+      <div class="row mt-5">
+        <% data.skills.forEach(function(skill, index) { %>
+          <div class="col-md-6 mb-3 animate-on-scroll">
+            <div class="skill-bar-container">
+              <div class="skill-info">
+                <span class="skill-name"><%= skill.name %></span>
+                <span class="skill-percent"><%= skill.level %>%</span>
+              </div>
+              <div class="skill-track">
+                <div class="skill-fill" data-width="<%= skill.level %>" style="--delay: <%= index * 0.1 %>s;"></div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS SECTION ===== -->
+  <!-- Bootstrap card grid with hover animations -->
+  <section id="projects" class="section projects-section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">My Projects</h2>
+      <div class="section-divider animate-on-scroll"></div>
+
+      <!-- Bootstrap grid: 3 cols on large, 2 on medium, 1 on small -->
+      <div class="row mt-5 g-4">
+        <% data.projects.forEach(function(project) { %>
+          <div class="col-lg-4 col-md-6 animate-on-scroll">
+            <div class="project-card">
+              <div class="project-accent" style="background: <%= project.color %>"></div>
+              <div class="project-body">
+                <h4 class="project-title"><%= project.title %></h4>
+                <p class="project-description"><%= project.description %></p>
+                <div class="project-tags">
+                  <% project.tags.forEach(function(tag) { %>
+                    <span class="project-tag" style="border-color: <%= project.color %>; color: <%= project.color %>"><%= tag %></span>
+                  <% }); %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT SECTION ===== -->
+  <section id="contact" class="section contact-section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll"><%= data.contact.heading %></h2>
+      <div class="section-divider animate-on-scroll"></div>
+      <p class="section-subtitle animate-on-scroll"><%= data.contact.description %></p>
+
+      <div class="row mt-5 justify-content-center">
+        <div class="col-lg-8 animate-on-scroll">
+          <% if (messageSent) { %>
+            <div class="alert alert-success d-flex align-items-center" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              Message sent successfully! Thank you for reaching out.
+            </div>
+          <% } %>
+
+          <form action="/contact" method="POST" class="contact-form">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Your Name" required />
+                  <label for="contactName">Your Name</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="email" class="form-control" id="contactEmail" name="contactEmail" placeholder="Your Email" required />
+                  <label for="contactEmail">Your Email</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-floating">
+                  <textarea class="form-control" id="contactMessage" name="contactMessage" placeholder="Your Message" style="height: 140px" required></textarea>
+                  <label for="contactMessage">Your Message</label>
+                </div>
+              </div>
+              <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                  <i class="bi bi-send-fill me-2"></i>Send Message
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="container text-center">
+      <div class="footer-socials mb-3">
+        <a href="#" class="social-icon" aria-label="GitHub"><i class="bi bi-github"></i></a>
+        <a href="#" class="social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        <a href="#" class="social-icon" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" class="social-icon" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
+      </div>
+      <p class="footer-text">Designed & Built by <strong><%= data.hero.name %></strong></p>
+      <p class="footer-sub">Cognifyz Technologies - Full Stack Internship - Task 3</p>
+    </div>
+  </footer>
+
+  <!-- Back to top button -->
+  <a href="#hero" class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="bi bi-chevron-up"></i>
+  </a>
+
+  <!-- Bootstrap 5 JS Bundle (includes Popper.js for dropdowns & tooltips) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom JavaScript for animations and interactions -->
+  <script>
+    (function() {
+      // ---- Navbar background on scroll ----
+      var navbar = document.getElementById('mainNav');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+          navbar.classList.add('navbar-scrolled');
+        } else {
+          navbar.classList.remove('navbar-scrolled');
+        }
+      });
+
+      // ---- Back to top button visibility ----
+      var backBtn = document.getElementById('backToTop');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 400) {
+          backBtn.classList.add('visible');
+        } else {
+          backBtn.classList.remove('visible');
+        }
+      });
+
+      // ---- Intersection Observer for scroll animations ----
+      // Elements with class "animate-on-scroll" will fade in and
+      // slide up when they enter the viewport.
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
+        observer.observe(el);
+      });
+
+      // ---- Animate skill bars when they enter viewport ----
+      var skillObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var fill = entry.target.querySelector('.skill-fill');
+            if (fill) {
+              fill.style.width = fill.getAttribute('data-width') + '%';
+            }
+            skillObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('.skill-bar-container').forEach(function(el) {
+        skillObserver.observe(el);
+      });
+
+      // ---- Smooth scroll for anchor links ----
+      document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          var target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            window.scrollTo({
+              top: target.offsetTop - 70,
+              behavior: 'smooth'
+            });
+          }
+          // Close mobile navbar after click
+          var navCollapse = document.getElementById('navContent');
+          if (navCollapse.classList.contains('show')) {
+            var bsCollapse = bootstrap.Collapse.getInstance(navCollapse);
+            if (bsCollapse) bsCollapse.hide();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "task-3-advanced-css-responsive",
+  "version": "1.0.0",
+  "description": "Full Stack Development Internship - Task 3: Advanced CSS Styling and Responsive Design with Bootstrap",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "express",
+    "ejs",
+    "bootstrap",
+    "responsive",
+    "css-animations"
+  ],
+  "author": "Deepak Paswan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "ejs": "^3.1.10"
+  }
+}
