@@ -1,0 +1,94 @@
+<!--
+  index.ejs - SPA Shell for NexusAPI Dashboard
+
+  This single page powers the entire application.
+  Client-side JavaScript (app.js) handles:
+    - Hash-based routing (#/login, #/register, #/dashboard, #/github, #/weather, #/exchange, #/api-docs)
+    - OAuth JWT token management (storage, auto-refresh, Bearer auth)
+    - Dynamic page rendering via DOM manipulation
+    - Real-time rate limit & circuit breaker dashboards
+    - External API integration UIs
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NexusAPI - Advanced API Dashboard demonstrating OAuth JWT authentication, external API integration, rate limiting, and circuit breaker patterns." />
+  <title><%= pageTitle %></title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="mainNav">
+    <div class="nav-container">
+      <a href="#/dashboard" class="nav-brand" id="navBrand">
+        <span class="brand-icon">
+          <i class="bi bi-braces-asterisk"></i>
+        </span>
+        <span class="brand-text">Nexus<span class="brand-accent">API</span></span>
+      </a>
+
+      <!-- Navigation links (dynamically updated based on auth state) -->
+      <div class="nav-links" id="navLinks">
+        <a href="#/dashboard" class="nav-link" data-route="dashboard">
+          <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+        </a>
+        <a href="#/github" class="nav-link" data-route="github">
+          <i class="bi bi-github"></i><span>GitHub</span>
+        </a>
+        <a href="#/weather" class="nav-link" data-route="weather">
+          <i class="bi bi-cloud-sun-fill"></i><span>Weather</span>
+        </a>
+        <a href="#/exchange" class="nav-link" data-route="exchange">
+          <i class="bi bi-currency-exchange"></i><span>Exchange</span>
+        </a>
+        <a href="#/api-docs" class="nav-link" data-route="api-docs">
+          <i class="bi bi-book-fill"></i><span>API Docs</span>
+        </a>
+      </div>
+
+      <div class="nav-actions" id="navActions">
+        <!-- Filled by JS based on auth state -->
+      </div>
+
+      <!-- Mobile menu toggle -->
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN CONTENT AREA ===== -->
+  <main class="main-content" id="app">
+    <div class="page-loader" id="pageLoader">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Initializing NexusAPI...</p>
+    </div>
+  </main>
+
+  <!-- ===== TOAST NOTIFICATION CONTAINER ===== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ===== MODAL OVERLAY ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox">
+      <!-- Modal content injected by JS -->
+    </div>
+  </div>
+
+  <!-- Client-side application script -->
+  <script src="/js/app.js"></script>
+</body>
+</html>

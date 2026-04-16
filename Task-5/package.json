@@ -1,0 +1,29 @@
+{
+  "name": "task-5-advanced-api-external-integration",
+  "version": "1.0.0",
+  "description": "Full Stack Development Internship - Task 5: Advanced API Usage, OAuth/JWT Authentication, External API Integration, Rate Limiting & Circuit Breaker",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "express",
+    "ejs",
+    "oauth",
+    "jwt",
+    "rate-limiting",
+    "circuit-breaker",
+    "external-api",
+    "github-api",
+    "weather-api",
+    "exchange-rate-api"
+  ],
+  "author": "Deepak Paswan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "ejs": "^3.1.10",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
